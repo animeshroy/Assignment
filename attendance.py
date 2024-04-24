@@ -12,24 +12,25 @@ def process(nod):
     '''
     Generating all possible combinations for using 0's and 1's for valid days
     '''
-    for p_day in range(1, possible_ways_to_present+1):
-        absent_days = nod - p_day
-        choices = '1'* p_day + '0' * absent_days
-        perms = set(permutations(choices))
+    for present_day in range(1, possible_ways_to_present+1):
+        absent_days = nod - present_day
+        choices = '1'* present_day + '0' * absent_days
+        perms_values = set(permutations(choices))
 
-        for perm in perms:
-            itert_counts = nod - min_days_to_attend - p_day  + 1
-            stop_iter = False
-            for count in range(itert_counts):
-                consecutive_absent_days=step = nod - p_day - count
-                limit = p_day + count + 1
+        for value in perms_values:
+            days_count = nod - min_days_to_attend - present_day  + 1
+            flag = False
+            for day in range(days_count):
+                consecutive_absent_days = nod - day - present_day
+                jump = consecutive_absent_days
+                limit = present_day + day + 1
                 for index in range(limit):
-                    sub_str = perm[index: index + step]
+                    sub_str = value[index: index + jump]
                     if sub_str.count('0') == consecutive_absent_days:
-                        invalid_ways[perm] = invalid_ways.get(perm, 0) + 1
-                        stop_iter = True
+                        invalid_ways[value] = invalid_ways.get(value, 0) + 1
+                        flag = True
                         break
-                if stop_iter:
+                if flag:
                     break
     
 
@@ -41,5 +42,5 @@ def process(nod):
     probability = total_ways_to_miss - invalid_consecutive_days
     return f'{probability}/{no_of_ways_to_attend}'
 
-#print(process(5))
+print(process(5))
 #print(process(10))
